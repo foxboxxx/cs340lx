@@ -1539,7 +1539,7 @@ Disassembly of section .rodata.str1.4:
 
 Disassembly of section .rodata:
 
-00000000 <__FUNCTION__.5684>:
+00000000 <__FUNCTION__.5692>:
    0:	636d656d 	cmnvs	sp, #457179136	; 0x1b400000
    4:	35327970 	ldrcc	r7, [r2, #-2416]!	; 0xfffff690
    8:	Address 0x0000000000000008 is out of bounds.
@@ -8779,18 +8779,18 @@ Disassembly of section .rodata.str1.4:
 
 Disassembly of section .rodata:
 
-00000000 <__FUNCTION__.5708>:
+00000000 <__FUNCTION__.5716>:
    0:	725f6970 	subsvc	r6, pc, #112, 18	; 0x1c0000
    4:	6f646e61 	svcvs	0x00646e61
    8:	65735f6d 	ldrbvs	r5, [r3, #-3949]!	; 0xfffff093
    c:	00006465 	andeq	r6, r0, r5, ror #8
 
-00000010 <__FUNCTION__.5718>:
+00000010 <__FUNCTION__.5726>:
   10:	725f6970 	subsvc	r6, pc, #112, 18	; 0x1c0000
   14:	6f646e61 	svcvs	0x00646e61
   18:	0000006d 	andeq	r0, r0, sp, rrx
 
-0000001c <__FUNCTION__.5712>:
+0000001c <__FUNCTION__.5720>:
   1c:	725f6970 	subsvc	r6, pc, #112, 18	; 0x1c0000
   20:	6f646e61 	svcvs	0x00646e61
   24:	6e695f6d 	cdpvs	15, 6, cr5, cr9, cr13, {3}
@@ -11056,12 +11056,12 @@ Disassembly of section .rodata.str1.4:
 
 Disassembly of section .rodata:
 
-00000000 <__FUNCTION__.5693>:
+00000000 <__FUNCTION__.5701>:
    0:	74696d65 	strbtvc	r6, [r9], #-3429	; 0xfffff29b
    4:	6c61765f 	stclvs	6, cr7, [r1], #-380	; 0xfffffe84
    8:	00000000 	andeq	r0, r0, r0
 
-0000000c <__FUNCTION__.5729>:
+0000000c <__FUNCTION__.5737>:
    c:	69727076 	ldmdbvs	r2!, {r1, r2, r4, r5, r6, ip, sp, lr}^
   10:	006b746e 	rsbeq	r7, fp, lr, ror #8
 
@@ -20895,16 +20895,16 @@ Disassembly of section .rodata.str1.4:
 
 Disassembly of section .rodata:
 
-00000000 <__FUNCTION__.5680>:
+00000000 <__FUNCTION__.5688>:
    0:	63747570 	cmnvs	r4, #112, 10	; 0x1c000000
    4:	00726168 	rsbseq	r6, r2, r8, ror #2
 
-00000008 <__FUNCTION__.5698>:
+00000008 <__FUNCTION__.5706>:
    8:	74696d65 	strbtvc	r6, [r9], #-3429	; 0xfffff29b
    c:	6c61765f 	stclvs	6, cr7, [r1], #-380	; 0xfffffe84
   10:	00000000 	andeq	r0, r0, r0
 
-00000014 <__FUNCTION__.5716>:
+00000014 <__FUNCTION__.5724>:
   14:	706e7376 	rsbvc	r7, lr, r6, ror r3
   18:	746e6972 	strbtvc	r6, [lr], #-2418	; 0xfffff68e
   1c:	Address 0x000000000000001c is out of bounds.
@@ -37404,7 +37404,7 @@ Disassembly of section .rodata.str1.4:
 
 Disassembly of section .rodata:
 
-00000000 <__FUNCTION__.5678>:
+00000000 <__FUNCTION__.5686>:
    0:	61746164 	cmnvs	r4, r4, ror #2
    4:	6f62615f 	svcvs	0x0062615f
    8:	765f7472 			; <UNDEFINED> instruction: 0x765f7472
@@ -38829,7 +38829,7 @@ Disassembly of section .rodata.str1.4:
 
 Disassembly of section .rodata:
 
-00000000 <__FUNCTION__.5678>:
+00000000 <__FUNCTION__.5686>:
    0:	74736166 	ldrbtvc	r6, [r3], #-358	; 0xfffffe9a
    4:	746e695f 	strbtvc	r6, [lr], #-2399	; 0xfffff6a1
    8:	75727265 	ldrbvc	r7, [r2, #-613]!	; 0xfffffd9b
@@ -38837,7 +38837,7 @@ Disassembly of section .rodata:
   10:	6f746365 	svcvs	0x00746365
   14:	00000072 	andeq	r0, r0, r2, ror r0
 
-00000018 <__FUNCTION__.5682>:
+00000018 <__FUNCTION__.5690>:
   18:	5f716966 	svcpl	0x00716966
   1c:	74636576 	strbtvc	r6, [r3], #-1398	; 0xfffffa8a
   20:	Address 0x0000000000000020 is out of bounds.
@@ -40299,7 +40299,7 @@ Disassembly of section .rodata.str1.4:
 
 Disassembly of section .rodata:
 
-00000000 <__FUNCTION__.5678>:
+00000000 <__FUNCTION__.5686>:
    0:	5f746e69 	svcpl	0x00746e69
    4:	74636576 	strbtvc	r6, [r3], #-1398	; 0xfffffa8a
    8:	Address 0x0000000000000008 is out of bounds.
@@ -41703,7 +41703,7 @@ Disassembly of section .rodata.str1.4:
 
 Disassembly of section .rodata:
 
-00000000 <__FUNCTION__.5678>:
+00000000 <__FUNCTION__.5686>:
    0:	65746e69 	ldrbvs	r6, [r4, #-3689]!	; 0xfffff197
    4:	70757272 	rsbsvc	r7, r5, r2, ror r2
    8:	65765f74 	ldrbvs	r5, [r6, #-3956]!	; 0xfffff08c
@@ -43113,7 +43113,7 @@ Disassembly of section .rodata.str1.4:
 
 Disassembly of section .rodata:
 
-00000000 <__FUNCTION__.5678>:
+00000000 <__FUNCTION__.5686>:
    0:	66657270 			; <UNDEFINED> instruction: 0x66657270
    4:	68637465 	stmdavs	r3!, {r0, r2, r5, r6, sl, ip, sp, lr}^
    8:	6f62615f 	svcvs	0x0062615f
@@ -44527,7 +44527,7 @@ Disassembly of section .rodata.str1.4:
 
 Disassembly of section .rodata:
 
-00000000 <__FUNCTION__.5678>:
+00000000 <__FUNCTION__.5686>:
    0:	65736572 	ldrbvs	r6, [r3, #-1394]!	; 0xfffffa8e
    4:	65765f74 	ldrbvs	r5, [r6, #-3956]!	; 0xfffff08c
    8:	726f7463 	rsbvc	r7, pc, #1660944384	; 0x63000000
@@ -45933,7 +45933,7 @@ Disassembly of section .rodata.str1.4:
 
 Disassembly of section .rodata:
 
-00000000 <__FUNCTION__.5678>:
+00000000 <__FUNCTION__.5686>:
    0:	63737973 	cmnvs	r3, #1884160	; 0x1cc000
    4:	5f6c6c61 	svcpl	0x006c6c61
    8:	74636576 	strbtvc	r6, [r3], #-1398	; 0xfffffa8a
@@ -47350,7 +47350,7 @@ Disassembly of section .rodata.str1.4:
 
 Disassembly of section .rodata:
 
-00000000 <__FUNCTION__.5678>:
+00000000 <__FUNCTION__.5686>:
    0:	65646e75 	strbvs	r6, [r4, #-3701]!	; 0xfffff18b
    4:	656e6966 	strbvs	r6, [lr, #-2406]!	; 0xfffff69a
    8:	6e695f64 	cdpvs	15, 6, cr5, cr9, cr4, {3}
@@ -50115,7 +50115,7 @@ Disassembly of section .rodata.str1.4:
 
 Disassembly of section .rodata:
 
-00000000 <__FUNCTION__.5678>:
+00000000 <__FUNCTION__.5686>:
    0:	6f697067 	svcvs	0x00697067
    4:	6e61705f 	mcrvs	0, 3, r7, cr1, cr15, {2}
    8:	Address 0x0000000000000008 is out of bounds.

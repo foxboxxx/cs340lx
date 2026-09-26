@@ -12,6 +12,10 @@
 #include "cycle-count.h"
 #include "vector-base.h"
 #include "gpio-raw.h"
+/* #include "asm-helpers.h" */
+
+/* cp_asm_raw(cp15_scratch2, p15, 0, c13, c0, 3) */
+/* cp_asm_raw(cp15_scratch1, p15, 0, c13, c0, 2) */
 
 // Can change these pins to whatever you want.  
 // 
@@ -24,7 +28,7 @@ enum { out_pin = 26, in_pin = 27 };
 // since they are read by non-interrupt code, we must
 // either use memory barriers or mark them as volatile.
 /* static volatile unsigned n_rising_edge, n_falling_edge; */
-static volatile unsigned n_interrupt;
+/* static volatile unsigned n_interrupt; */
 
 // interrupt handler: should only be called on gpio 
 // transitions from 0->1 or 1->0, nothing else (no timer, 
@@ -34,9 +38,11 @@ static volatile unsigned n_interrupt;
 //  2. clear the interrupt;
 //  3. return.
     
+
 void int_vector(uint32_t pc) {
-        n_interrupt++;
-        raw_gpio_event_clear(in_pin);
+        /* n_interrupt++; */
+    cp15_scratch1_set_raw(cp15_scratch1_get() + 1);
+    raw_gpio_event_clear(in_pin);
 }
 
 // driver that triggers and measures the interrupts
@@ -54,9 +60,9 @@ void test_cost(unsigned pin) {
         // occured).
         c = cycle_cnt_read();
 
-        let r = n_interrupt;
+        let r = cp15_scratch1_get();
         raw_gpio_set_on(pin);
-        while (n_interrupt == r)
+        while (cp15_scratch1_get() == r)
             ;
 
         e = cycle_cnt_read();
@@ -69,9 +75,9 @@ void test_cost(unsigned pin) {
         // occured).
         c = cycle_cnt_read();
 
-        let f = n_interrupt;
+        let f = cp15_scratch1_get();
         raw_gpio_set_off(pin);
-        while (n_interrupt == f)
+        while (cp15_scratch1_get() == f)
             ;
         e = cycle_cnt_read();
         output("%d: falling\t= %d cycles\n", i*2+1, e-c);
@@ -81,6 +87,8 @@ void test_cost(unsigned pin) {
 }
 
 void notmain() {
+    cp15_scratch2_set_raw(gpio_eds0);
+    cp15_scratch1_set_raw(0);
     //*****************************************************
     // 1. setup pins and check that loopback works.
     gpio_set_output(out_pin);
