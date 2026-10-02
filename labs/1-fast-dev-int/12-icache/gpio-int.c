@@ -12,6 +12,7 @@
 #include "cycle-count.h"
 #include "vector-base.h"
 #include "gpio-raw.h"
+#include "cache-support.h"
 /* #include "asm-helpers.h" */
 
 /* cp_asm_raw(cp15_scratch2, p15, 0, c13, c0, 3) */
@@ -23,6 +24,7 @@
 // code b/c it can load derived constants in fewer instructions
 // [useful side quest: write some code to check this claim!]
 enum { out_pin = 26, in_pin = 27 };
+void test_cost(unsigned pin);
 
 /* enum { */
 /*     GPEDS0=0x20200040, */
@@ -107,32 +109,6 @@ __attribute__((aligned(32))) void int_vector(uint32_t pc) {
 
 // driver that triggers and measures the interrupts
 // caused by writing to GPIO <pin>.
-void test_cost(unsigned pin) { 
-    // initial state.
-    assert(raw_gpio_read(in_pin) == 0);
-    asm volatile("cpsie f");
-
-    float sum = 0;
-    /* uint32_t c,e; */
-    extern unsigned measure_int_asm(volatile unsigned* reg, unsigned pin);
-    int rising[10]; 
-    int falling[10];
-    for(int i = 0; i < 10; i++) {
-        unsigned count = measure_int_asm((volatile unsigned*)0x2020001c, 0b1 << pin);
-        output("%d: rising\t= %d cycles\n", i*2, count);
-        /* rising[i] = count; */
-        sum += count;
-        count = measure_int_asm((volatile unsigned*)0x20200028, 0b1 << pin);
-        output("%d: falling\t= %d cycles\n", i*2+1, count);
-        /* falling[i] = count; */
-        sum += count;
-    }
-    for (int i = 0; i < 10; i++) {
-        /* output("%d: rising\t=%d cycles\n", i * 2, rising[i]); */
-        /* output("%d: falling\t=%d cycles\n", i + 2 + 1, falling[i]); */
-    }
-    output("ave cost = %f\n", sum / 20);
-}
 
 void notmain() {
     cp15_scratch2_set_raw(gpio_eds0);
@@ -174,6 +150,7 @@ void notmain() {
 
     fiq_init(gpio_eds0, 0b1 << in_pin);
 
+
     x_gpio_fiq_async_rising_edge(in_pin);
     x_gpio_fiq_async_falling_edge(in_pin);
 
@@ -205,10 +182,41 @@ void notmain() {
     output("bp on\n");
     uint32_t r;
     asm volatile("mrc p15, 0, %0, c1, c0, 0" : "=r"(r));
-    r &= ~(1 << 11);
+    r |= (1 << 11);
     asm volatile("mcr p15, 0, %0, c1, c0, 0" : : "r"(r));
     /* PREFETCH_FLUSH(r1); */
     asm volatile("mcr p15, 0, r1, c7, c5, 4"::);
     test_cost(out_pin);
     return;
+}
+
+void test_cost(unsigned pin) { 
+    // prefetch instructions
+    extern uint32_t prefetch_end[];
+    prefetch_inst((void*)test_cost, prefetch_end);
+
+    // initial state.
+    assert(raw_gpio_read(in_pin) == 0);
+    asm volatile("cpsie f");
+
+    float sum = 0;
+    /* uint32_t c,e; */
+    extern unsigned measure_int_asm(volatile unsigned* reg, unsigned pin);
+    int rising[10]; 
+    int falling[10];
+    for(int i = 0; i < 10; i++) {
+        unsigned count = measure_int_asm((volatile unsigned*)0x2020001c, 0b1 << pin);
+        /* output("%d: rising\t= %d cycles\n", i*2, count); */
+        rising[i] = count;
+        sum += count;
+        count = measure_int_asm((volatile unsigned*)0x20200028, 0b1 << pin);
+        /* output("%d: falling\t= %d cycles\n", i*2+1, count); */
+        falling[i] = count;
+        sum += count;
+    }
+    for (int i = 0; i < 10; i++) {
+        output("%d: rising\t=%d cycles\n", i * 2, rising[i]);
+        output("%d: falling\t=%d cycles\n", i * 2 + 1, falling[i]);
+    }
+    output("ave cost = %f\n", sum / 20);
 }

@@ -325,7 +325,7 @@ Disassembly of section .text:
     84a8:	e3a0301b 	mov	r3, #27, 0
     84ac:	e3a0201a 	mov	r2, #26, 0
     84b0:	e58d3000 	str	r3, [sp]
-    84b4:	e3a030ad 	mov	r3, #173, 0	; 0xad
+    84b4:	e3a03097 	mov	r3, #151, 0	; 0x97
     84b8:	e58d2004 	str	r2, [sp, #4]
     84bc:	e59f208c 	ldr	r2, [pc, #140]	; 8550 <notmain+0x1e0>
     84c0:	e59f108c 	ldr	r1, [pc, #140]	; 8554 <notmain+0x1e4>
@@ -336,7 +336,7 @@ Disassembly of section .text:
     84d4:	e3a0201a 	mov	r2, #26, 0
     84d8:	e58d3000 	str	r3, [sp]
     84dc:	e58d2004 	str	r2, [sp, #4]
-    84e0:	e3a030a9 	mov	r3, #169, 0	; 0xa9
+    84e0:	e3a03093 	mov	r3, #147, 0	; 0x93
     84e4:	eafffff4 	b	84bc <notmain+0x14c>
     84e8:	e59f1058 	ldr	r1, [pc, #88]	; 8548 <notmain+0x1d8>
     84ec:	e58d2004 	str	r2, [sp, #4]
