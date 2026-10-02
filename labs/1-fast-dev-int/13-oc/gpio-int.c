@@ -151,9 +151,11 @@ void notmain() {
     vector_base_set(fiq_ints);
     output("assigned fiq_ints\n");
 
-    extern void fiq_init(unsigned gpio_eds0, unsigned in_pin);
+    uint32_t fiq_cnt = 0;
+    extern void fiq_init(unsigned gpio_eds0, unsigned in_pin, uint32_t* counter);
 
-    fiq_init(gpio_eds0, 0b1 << in_pin);
+
+    fiq_init(gpio_eds0, 0b1 << in_pin, &fiq_cnt);
 
 
     x_gpio_fiq_async_rising_edge(in_pin);
@@ -177,22 +179,21 @@ void notmain() {
     // leave this off initially so its easier to see the effect
     // of speed improvements.
     // caches_enable();
+    //
 
+    test_cost(out_pin);
 
-    uint32_t cur_MHz = cpu_MHz_get();
-    float cycles_per_int = test_cost(out_pin);
-    uint32_t orig_MHz = 700;
-    float scaled_cycles = (cycles_per_int * orig_MHz) / cur_MHz;
-    float int_per_sec = cur_MHz / cycles_per_int;
-    output("interrupts per second = %fM, scaled cycles per int=%f\n",
-           int_per_sec/(1000.*1000.), scaled_cycles);
+    extern uint32_t fiq_get_cnt(void);
 
     output("caches off\n");
     test_cost(out_pin);
+    output("fiq cnt: %d\n\n", fiq_get_cnt());
+
     output("caches on\n");
     caches_enable();
     test_cost(out_pin);
-    test_cost(out_pin);
+    output("fiq cnt: %d\n\n", fiq_get_cnt());
+
     output("bp on\n");
     uint32_t r;
     asm volatile("mrc p15, 0, %0, c1, c0, 0" : "=r"(r));
@@ -201,6 +202,22 @@ void notmain() {
     /* PREFETCH_FLUSH(r1); */
     asm volatile("mcr p15, 0, r1, c7, c5, 4"::);
     test_cost(out_pin);
+    output("fiq cnt: %d\n\n", fiq_get_cnt());
+
+    uint32_t set_MHz = rpi_clock_hz_set(ARM, 1150 * 1000 * 1000, 0) / (1000 * 1000);
+    int x = set_MHz;
+    uint32_t cur_MHz = cpu_MHz_get();
+    float cycles_per_int = test_cost(out_pin);
+    uint32_t orig_MHz = 700;
+    float scaled_cycles = (cycles_per_int * orig_MHz) / cur_MHz;
+    float int_per_sec = cur_MHz / cycles_per_int;
+
+    set_MHz = rpi_clock_hz_set(ARM, 700 * 1000 * 1000, 0) / (1000 * 1000);
+    delay_ms(10);
+    output("\n\n");
+    output("interrupts per second = %fM, scaled cycles per int=%f\n",
+           int_per_sec/(1), scaled_cycles);
+    output("fiq cnt: %d\n\n", fiq_get_cnt());
 
     return;
 }
@@ -221,11 +238,9 @@ float test_cost(unsigned pin) {
     int falling[10];
     for(int i = 0; i < 10; i++) {
         unsigned count = measure_int_asm((volatile unsigned*)0x2020001c, 0b1 << pin);
-        /* output("%d: rising\t= %d cycles\n", i*2, count); */
         rising[i] = count;
         sum += count;
         count = measure_int_asm((volatile unsigned*)0x20200028, 0b1 << pin);
-        /* output("%d: falling\t= %d cycles\n", i*2+1, count); */
         falling[i] = count;
         sum += count;
     }
@@ -233,6 +248,6 @@ float test_cost(unsigned pin) {
         output("%d: rising\t=%d cycles\n", i * 2, rising[i]);
         output("%d: falling\t=%d cycles\n", i * 2 + 1, falling[i]);
     }
-    output("ave cost = %f\n", sum / 20);
-    return sum / 20.0;
+    output("ave cost = %f; derived from %f / 20\n", sum / 20, sum);
+    return sum / 20;
 }

@@ -10,6 +10,9 @@
 @ the scratch register to indicate an interrupt happened
 #define one         r10
 
+#define fiq_cnt_reg r11
+#define fiq_cnt r12
+
 .align 5;
 .globl fiq_ints
 fiq_ints: 
@@ -23,15 +26,28 @@ fiq_ints:
     b reset
 
     str event0_val, [event0]
+    mcr p15, 0, event0_val, c7, c10, 4
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+
+    @ldr r0, [fiq_cnt_reg]
+    @add r0, r0, #1
+    @str r0, [fiq_cnt_reg]
+    add fiq_cnt, fiq_cnt, #1
     msr cpsr, r3
     mrc p15, 0, r0, c15, c12, 1
     sub r0, r0, r2
+    @# add cnt, cnt, #1
     bx lr
 .align 5;
 .globl measure_int_asm
 measure_int_asm:
     mrs r3, cpsr                  @# save cpsr
-    mrc p15, 0, r2, c15, c12, 1   @#start cycle cnt
+    mrc p15, 0, r2, c15, c12, 1   @# start cycle cnt
     str r1, [r0]                  @# fiq triggr
 loop:
     b loop
@@ -46,12 +62,25 @@ prefetch_end:
 .globl fiq_init
 fiq_init:
     CPS #17  @ switch to fiq mode
-    prefetch_flush(r2)
+    prefetch_flush(r3)
     mov event0, r0
     mov event0_val, r1
     mov one, #0
+    @mov cnt, #0
+    mov fiq_cnt_reg, r2
+    mov fiq_cnt, #0
     CPS #19 @ bac to super
-    prefetch_flush(r2)
+    prefetch_flush(r3)
+    bx lr
+
+.align 5
+.globl fiq_get_cnt
+fiq_get_cnt:
+    cps #17
+    prefetch_flush(r1)
+    mov r0, fiq_cnt
+    cps #19
+    prefetch_flush(r1)
     bx lr
 
 #define MK_TRAMPOLINE(name, offset, fn)         \
