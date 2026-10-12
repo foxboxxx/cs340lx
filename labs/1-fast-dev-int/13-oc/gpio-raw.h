@@ -1,6 +1,6 @@
 #include "rpi.h"
 #include <stdint.h>
-
+n
 #define OUTPUT 0b001
 #define INPUT 0b000
 

@@ -1,0 +1,5 @@
+make -C /Users/joe/DOcuments/github/cs340lx-26aut//lib/libm/
+make[2]: Nothing to be done for `all'.
+make -C /Users/joe/DOcuments/github/cs340lx-26aut//lib/libm/
+make[2]: Nothing to be done for `all'.
+my-install  ./timed-read.bin
